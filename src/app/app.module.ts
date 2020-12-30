@@ -18,6 +18,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatSliderModule} from '@angular/material/slider';
+import { HttpClientModule } from '@angular/common/http';
+import {baseUrl} from './shared/baseurl'
+
 
 
 
@@ -69,9 +72,12 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    HttpClientModule,
   ],
   providers: [
     DishService,
+    {provide:'baseURl',useValue:baseUrl},
+
   ],
   entryComponents: [
     LoginComponent

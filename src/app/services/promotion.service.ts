@@ -1,32 +1,30 @@
 import { Injectable } from '@angular/core';
 import {Promotion} from '../shared/promotion';
-import {PROMOTIONS} from '../shared/promotions';
+
+import {map} from 'rxjs/operators';
+import {baseUrl} from '../shared/baseurl';
+import {HttpClient} from  '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PromotionService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getPromotions(): Promise<Promotion[]> {
-    return new Promise(resolve=> {
-      // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(PROMOTIONS), 2000);
-    });
+  getPromotions(): Observable<Promotion[]> {
+    return this.http.get<Promotion[]>(baseUrl+'promotions')
+
   }
 
-  getPromotion(id: string): Promise<Promotion> {
-    return new Promise(resolve=> {
-      // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(PROMOTIONS.filter((promo) => (promo.id === id))[0]), 2000);
-    });
+  getPromotion(id: string): Observable<Promotion> {
+    return this.http.get<Promotion>(baseUrl+'promotions/'+id)
+
   }
 
-  getFeaturedPromotion(): Promise<Promotion> {
-    return  new Promise(resolve=> {
+  getFeaturedPromotion(): Observable<Promotion> {
       // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(PROMOTIONS.filter((promo) => promo.featured)[0]), 2000);
-    });
+      return this.http.get<Promotion[]>(baseUrl+'promotions?featured=true').pipe(map(leaders=>leaders[0]));
   }
 }
