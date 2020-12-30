@@ -8,7 +8,7 @@ import {DishService} from '../services/dish.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-
+  errMess: string;
   dishes : Dish[];
   selectedDish : Dish;
 
@@ -16,7 +16,9 @@ export class MenuComponent implements OnInit {
     @Inject('baseURl') private baseURL) { }
 
   ngOnInit(): void {
-   this.disheService.getDishes().subscribe(dishes => this.dishes = dishes);;
+   this.disheService.getDishes()
+   .subscribe(dishes => this.dishes = dishes,
+     errmess => this.errMess = <any>errmess);
   }
 
   onSelect(dish:Dish){

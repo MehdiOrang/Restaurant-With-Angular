@@ -22,9 +22,6 @@ import { HttpClientModule } from '@angular/common/http';
 import {baseUrl} from './shared/baseurl'
 
 
-
-
-
 import 'hammerjs';
 
 import {DishService} from './services/dish.service';
