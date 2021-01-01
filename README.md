@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.
 
+This project use a jason file(db.json you can find it in asset folder under app, images are there also. but note you should move these files to wherevere your server is running) as backend then you can use json-server package to run your backend.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
