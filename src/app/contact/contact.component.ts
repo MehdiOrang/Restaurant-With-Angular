@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animations';
+import { flyInOut, expand, visibility } from '../animations/app.animations';
+import {FeedbackService} from '../services/feedback.service';
 
 
 @Component({
@@ -14,14 +15,21 @@ import { flyInOut } from '../animations/app.animations';
     'style': 'display: block;'
     },
     animations: [
-      flyInOut()
+      flyInOut(),
+      expand(),
+      visibility(),
     ]
 })
 export class ContactComponent implements OnInit {
+  feedbackcopy: Feedback;
+  errMess:string;
+  feedback:Feedback;
 
   feedbackForm: FormGroup;
-  feedback: Feedback;
   contactType = ContactType;
+
+  isLoading: boolean;
+  isShowingResponse: boolean;
 
   formErrors = {
     'firstname': '',
@@ -53,8 +61,12 @@ export class ContactComponent implements OnInit {
 
   @ViewChild('fform') feedbackFormDirective;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder, 
+    private feedbackService: FeedbackService) {
     this.createForm();
+    this.isLoading = false;
+    this.isShowingResponse = false;
   }
 
   ngOnInit() {
@@ -99,7 +111,25 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
+
     this.feedback = this.feedbackForm.value;
+
+    this.feedbackService.submitFeedback(this.feedback).
+    subscribe(feedback => {
+      this.feedback = feedback; this.feedbackcopy = feedback; 
+    },
+    errmess => { this.feedback = null; this.feedbackcopy = null; this.errMess = <any>errmess; },
+    () => {
+      this.isShowingResponse = true;
+      setTimeout(() => {
+          this.isShowingResponse = false;
+          this.isLoading = false;
+        } , 5000
+      );
+    });
+
+    this.feedback =null;
     console.log(this.feedback);
     this.feedbackForm.reset({
       firstname: '',
